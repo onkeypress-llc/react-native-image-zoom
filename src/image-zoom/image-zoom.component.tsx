@@ -7,70 +7,70 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
   public static defaultProps = new ImageZoomProps();
   public state = new ImageZoomState();
 
-  // 上次/当前/动画 x 位移
+  // last/current/animation x displacement
   private lastPositionX: number | null = null;
   private positionX = 0;
   private animatedPositionX = new Animated.Value(0);
 
-  // 上次/当前/动画 y 位移
+  // last/current/animation y displacement
   private lastPositionY: number | null = null;
   private positionY = 0;
   private animatedPositionY = new Animated.Value(0);
 
-  // 缩放大小
+  // zoom size
   private scale = 1;
   private animatedScale = new Animated.Value(1);
   private zoomLastDistance: number | null = null;
   private zoomCurrentDistance = 0;
 
-  // 上次手按下去的时间
+  // The last time the hand was pressed
   private lastTouchStartTime = 0;
 
-  // 滑动过程中，整体横向过界偏移量
+  // During the sliding process, the overall lateral cross-boundary offset
   private horizontalWholeOuterCounter = 0;
 
-  // 滑动过程中，swipeDown 偏移量
+  // During sliding, swipeDown offset
   private swipeDownOffset = 0;
 
-  // 滑动过程中，x y的总位移
+  // During the sliding process, the total displacement of x y
   private horizontalWholeCounter = 0;
   private verticalWholeCounter = 0;
 
-  // 两手距离中心点位置
+  // The position of the hands from the center point
   private centerDiffX = 0;
   private centerDiffY = 0;
 
-  // 触发单击的 timeout
+  // The timeout that triggers the click
   private singleClickTimeout: NodeJS.Timeout | undefined;
 
-  // 计算长按的 timeout
+  // Calculate timeout for long press
   private longPressTimeout: NodeJS.Timeout | undefined;
 
-  // 上一次点击的时间
+  // time of last click
   private lastClickTime = 0;
 
-  // 双击时的位置
+  // position when double-clicked
   private doubleClickX = 0;
   private doubleClickY = 0;
 
-  // 是否双击了
+  // Did you double click
   private isDoubleClick = false;
 
-  // 是否是长按
+  // Is it a long press
   private isLongPress = false;
 
-  // 是否在左右滑
+  // Are you swiping left or right?
   private isHorizontalWrap = false;
 
-  // 图片手势处理
+  // Image gesture processing
   private imagePanResponder = PanResponder.create({
-    // 要求成为响应者：
+    // Request to be a responder:
     onStartShouldSetPanResponder: this.props.onStartShouldSetPanResponder,
     onPanResponderTerminationRequest: this.props.onPanResponderTerminationRequest,
     onMoveShouldSetPanResponder: this.props.onMoveShouldSetPanResponder,
 
     onPanResponderGrant: (evt) => {
-      // 开始手势操作
+      // Start gesture operation
       this.lastPositionX = null;
       this.lastPositionY = null;
       this.zoomLastDistance = null;
@@ -81,7 +81,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
       this.isLongPress = false;
       this.isHorizontalWrap = false;
 
-      // 任何手势开始，都清空单击计时器
+      // Any gesture starts, clears the click timer
       if (this.singleClickTimeout) {
         clearTimeout(this.singleClickTimeout);
       }
@@ -94,7 +94,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
         this.centerDiffY = centerY - this.props.cropHeight / 2;
       }
 
-      // 计算长按
+      // Calculate long press
       if (this.longPressTimeout) {
         clearTimeout(this.longPressTimeout);
       }
@@ -107,12 +107,12 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
       }, this.props.longPressTime);
 
       if (evt.nativeEvent.changedTouches.length <= 1) {
-        // 一个手指的情况
+        // case of one finger
         if (new Date().getTime() - this.lastClickTime < (this.props.doubleClickInterval || 0)) {
-          // 认为触发了双击
+          // Think double tap is triggered
           this.lastClickTime = 0;
 
-          // 因为可能触发放大，因此记录双击时的坐标位置
+          // Because zooming may be triggered, the coordinate position of the double-click is recorded
           this.doubleClickX = evt.nativeEvent.changedTouches[0].pageX;
           this.doubleClickY = evt.nativeEvent.changedTouches[0].pageY;
 
@@ -125,32 +125,32 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
             });
           }
 
-          // 取消长按
+          // Cancel long press
           clearTimeout(this.longPressTimeout);
 
-          // 缩放
+          // zoom
           this.isDoubleClick = true;
 
           if (this.props.enableDoubleClickZoom) {
             if (this.scale > 1 || this.scale < 1) {
-              // 回归原位
+              // return to place
               this.scale = 1;
 
               this.positionX = 0;
               this.positionY = 0;
             } else {
-              // 开始在位移地点缩放
-              // 记录之前缩放比例
-              // 此时 this.scale 一定为 1
+              // Start zooming at the offset location
+              // zoom before recording
+              // At this point this.scale must be 1
               const beforeScale = this.scale;
 
-              // 开始缩放
+              // start zooming
               this.scale = 2;
 
-              // 缩放 diff
+              // zoom diff
               const diffScale = this.scale - beforeScale;
-              // 找到两手中心点距离页面中心的位移
-              // 移动位置
+              // Find the displacement of the center point of both hands from the center of the page
+              // moving position
               this.positionX = ((this.props.cropWidth / 2 - this.doubleClickX) * diffScale) / this.scale;
 
               this.positionY = ((this.props.cropHeight / 2 - this.doubleClickY) * diffScale) / this.scale;
@@ -183,23 +183,23 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
     },
     onPanResponderMove: (evt, gestureState) => {
       if (this.isDoubleClick) {
-        // 有时双击会被当做位移，这里屏蔽掉
+        // Sometimes double-clicking will be used as displacement, which is blocked here
         return;
       }
 
       if (evt.nativeEvent.changedTouches.length <= 1) {
-        // x 位移
+        // x displacement
         let diffX = gestureState.dx - (this.lastPositionX || 0);
         if (this.lastPositionX === null) {
           diffX = 0;
         }
-        // y 位移
+        // y displacement
         let diffY = gestureState.dy - (this.lastPositionY || 0);
         if (this.lastPositionY === null) {
           diffY = 0;
         }
 
-        // 保留这一次位移作为下次的上一次位移
+        // Keep this displacement as the next previous displacement
         this.lastPositionX = gestureState.dx;
         this.lastPositionY = gestureState.dy;
 
@@ -207,32 +207,32 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
         this.verticalWholeCounter += diffY;
 
         if (Math.abs(this.horizontalWholeCounter) > 5 || Math.abs(this.verticalWholeCounter) > 5) {
-          // 如果位移超出手指范围，取消长按监听
+          // If the displacement is beyond the finger range, cancel the long press monitoring
           clearTimeout(this.longPressTimeout);
         }
 
         if (this.props.panToMove) {
-          // 处理左右滑，如果正在 swipeDown，左右滑失效
+          // Handle left and right swiping, if it is swipeDown, left and right swiping will fail
           if (this.swipeDownOffset === 0) {
             if (Math.abs(diffX) > Math.abs(diffY)) {
               this.isHorizontalWrap = true;
             }
 
-            // diffX > 0 表示手往右滑，图往左移动，反之同理
-            // horizontalWholeOuterCounter > 0 表示溢出在左侧，反之在右侧，绝对值越大溢出越多
+            // diffX > 0 It means that the hand slides to the right, the picture moves to the left, and vice versa
+            // horizontalWholeOuterCounter > 0 Indicates that the overflow is on the left, otherwise it is on the right, the larger the absolute value, the more overflow
             if (this.props.imageWidth * this.scale > this.props.cropWidth) {
-              // 如果图片宽度大图盒子宽度， 可以横向拖拽
-              // 没有溢出偏移量或者这次位移完全收回了偏移量才能拖拽
+              // If the image width is larger than the image box width, it can be dragged horizontally
+              // There is no overflow offset or this displacement completely retracts the offset before dragging
               if (this.horizontalWholeOuterCounter > 0) {
-                // 溢出在右侧
+                // overflow on the right
                 if (diffX < 0) {
-                  // 从右侧收紧
+                  // tighten from the right
                   if (this.horizontalWholeOuterCounter > Math.abs(diffX)) {
-                    // 偏移量还没有用完
+                    // The offset has not been used up
                     this.horizontalWholeOuterCounter += diffX;
                     diffX = 0;
                   } else {
-                    // 溢出量置为0，偏移量减去剩余溢出量，并且可以被拖动
+                    // The overflow is set to 0, the offset minus the remaining overflow, and can be dragged
                     diffX += this.horizontalWholeOuterCounter;
                     this.horizontalWholeOuterCounter = 0;
                     if (this.props.horizontalOuterRangeOffset) {
@@ -240,19 +240,19 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
                     }
                   }
                 } else {
-                  // 向右侧扩增
+                  // Amplify to the right
                   this.horizontalWholeOuterCounter += diffX;
                 }
               } else if (this.horizontalWholeOuterCounter < 0) {
-                // 溢出在左侧
+                // overflow on the left
                 if (diffX > 0) {
-                  // 从左侧收紧
+                  // tighten from the left
                   if (Math.abs(this.horizontalWholeOuterCounter) > diffX) {
-                    // 偏移量还没有用完
+                    // The offset has not been used up
                     this.horizontalWholeOuterCounter += diffX;
                     diffX = 0;
                   } else {
-                    // 溢出量置为0，偏移量减去剩余溢出量，并且可以被拖动
+                    // The overflow is set to 0, the offset minus the remaining overflow, and can be dragged
                     diffX += this.horizontalWholeOuterCounter;
                     this.horizontalWholeOuterCounter = 0;
                     if (this.props.horizontalOuterRangeOffset) {
@@ -260,39 +260,39 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
                     }
                   }
                 } else {
-                  // 向左侧扩增
+                  // Amplify to the left
                   this.horizontalWholeOuterCounter += diffX;
                 }
               } else {
-                // 溢出偏移量为0，正常移动
+                // Overflow offset is 0, normal movement
               }
 
-              // 产生位移
+              // generate displacement
               this.positionX += diffX / this.scale;
 
-              // 但是横向不能出现黑边
-              // 横向能容忍的绝对值
+              // But there is no black border in the horizontal direction
+              // The absolute value of lateral tolerance
               const horizontalMax = (this.props.imageWidth * this.scale - this.props.cropWidth) / 2 / this.scale;
               if (this.positionX < -horizontalMax) {
-                // 超越了左边临界点，还在继续向左移动
+                // Exceeded the left critical point and continues to move to the left
                 this.positionX = -horizontalMax;
 
-                // 让其产生细微位移，偏离轨道
+                // Let it have a slight displacement and deviate from the track
                 this.horizontalWholeOuterCounter += -1 / 1e10;
               } else if (this.positionX > horizontalMax) {
-                // 超越了右侧临界点，还在继续向右移动
+                // Exceeded the right critical point and continues to move to the right
                 this.positionX = horizontalMax;
 
-                // 让其产生细微位移，偏离轨道
+                // Let it have a slight displacement and deviate from the track
                 this.horizontalWholeOuterCounter += 1 / 1e10;
               }
               this.animatedPositionX.setValue(this.positionX);
             } else {
-              // 不能横向拖拽，全部算做溢出偏移量
+              // Can not drag horizontally, all count as overflow offset
               this.horizontalWholeOuterCounter += diffX;
             }
 
-            // 溢出量不会超过设定界限
+            // The amount of overflow will not exceed the set limit
             if (this.horizontalWholeOuterCounter > (this.props.maxOverflow || 0)) {
               this.horizontalWholeOuterCounter = this.props.maxOverflow || 0;
             } else if (this.horizontalWholeOuterCounter < -(this.props.maxOverflow || 0)) {
@@ -300,14 +300,14 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
             }
 
             if (this.horizontalWholeOuterCounter !== 0) {
-              // 如果溢出偏移量不是0，执行溢出回调
+              // If the overflow offset is not 0, execute the overflow callback
               if (this.props.horizontalOuterRangeOffset) {
                 this.props.horizontalOuterRangeOffset(this.horizontalWholeOuterCounter);
               }
             }
           }
 
-          // 如果图片高度大于盒子高度， 可以纵向弹性拖拽
+          // If the height of the picture is greater than the height of the box, it can be elastically dragged vertically
           if (this.props.imageHeight * this.scale > this.props.cropHeight) {
             this.positionY += diffY / this.scale;
             this.animatedPositionY.setValue(this.positionY);
@@ -332,17 +332,17 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
             //   }
             // }
           } else {
-            // swipeDown 不允许在已经有横向偏移量时触发
+            // swipeDown is not allowed to fire when there is already a lateral offset
             if (this.props.enableSwipeDown && !this.isHorizontalWrap) {
-              // 图片高度小于盒子高度，只能向下拖拽，而且一定是 swipeDown 动作
+              // The height of the picture is less than the height of the box, it can only be dragged down, and it must be a swipeDown action
               this.swipeDownOffset += diffY;
 
-              // 只要滑动溢出量不小于 0，就可以拖动
+              // You can drag as long as the swipe overflow is not less than 0
               if (this.swipeDownOffset > 0) {
                 this.positionY += diffY / this.scale;
                 this.animatedPositionY.setValue(this.positionY);
 
-                // 越到下方，缩放越小
+                // The further down you go, the smaller the zoom
                 this.scale = this.scale - diffY / 1000;
                 this.animatedScale.setValue(this.scale);
               }
@@ -350,14 +350,14 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
           }
         }
       } else {
-        // 多个手指的情况
-        // 取消长按状态
+        // In the case of multiple fingers
+        // Cancel the long press state
         if (this.longPressTimeout) {
           clearTimeout(this.longPressTimeout);
         }
 
         if (this.props.pinchToZoom) {
-          // 找最小的 x 和最大的 x
+          // find the smallest x and the largest x
           let minX: number;
           let maxX: number;
           if (evt.nativeEvent.changedTouches[0].locationX > evt.nativeEvent.changedTouches[1].locationX) {
@@ -394,18 +394,18 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
               zoom = this.props.maxScale || 0;
             }
 
-            // 记录之前缩放比例
+            // zoom before recording
             const beforeScale = this.scale;
 
-            // 开始缩放
+            // start zooming
             this.scale = zoom;
             this.animatedScale.setValue(this.scale);
 
-            // 图片要慢慢往两个手指的中心点移动
-            // 缩放 diff
+            // The picture should slowly move towards the center of the two fingers
+            // zoom diff
             const diffScale = this.scale - beforeScale;
-            // 找到两手中心点距离页面中心的位移
-            // 移动位置
+            // Find the displacement of the center point of both hands from the center of the page
+            // moving position
             this.positionX -= (this.centerDiffX * diffScale) / this.scale;
             this.positionY -= (this.centerDiffY * diffScale) / this.scale;
             this.animatedPositionX.setValue(this.positionX);
@@ -418,22 +418,22 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
       this.imageDidMove('onPanResponderMove');
     },
     onPanResponderRelease: (evt, gestureState) => {
-      // 取消长按
+      // Cancel long press
       if (this.longPressTimeout) {
         clearTimeout(this.longPressTimeout);
       }
 
-      // 双击结束，结束尾判断
+      // Double-click to end, end the tail judgment
       if (this.isDoubleClick) {
         return;
       }
 
-      // 长按结束，结束尾判断
+      // Long press to end, end the tail judgment
       if (this.isLongPress) {
         return;
       }
 
-      // 如果是单个手指、距离上次按住大于预设秒、滑动距离小于预设值, 则可能是单击（如果后续双击间隔内没有开始手势）
+      // If it is a single finger, the last hold is greater than the preset seconds, and the sliding distance is less than the preset value, it may be a single click (if the gesture is not started within the subsequent double-click interval)
       // const stayTime = new Date().getTime() - this.lastTouchStartTime!
       const moveDistance = Math.sqrt(gestureState.dx * gestureState.dx + gestureState.dy * gestureState.dy);
       const { locationX, locationY, pageX, pageY } = evt.nativeEvent;
@@ -445,7 +445,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
           }
         }, this.props.doubleClickInterval);
       } else {
-        // 多手势结束，或者滑动结束
+        // End of multi-gesture, or end of swipe
         if (this.props.responderRelease) {
           this.props.responderRelease(gestureState.vx, this.scale);
         }
@@ -466,7 +466,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
   };
 
   public panResponderReleaseResolve = (): void => {
-    // 判断是否是 swipeDown
+    // Determine whether it is swipeDown
     if (this.props.enableSwipeDown && this.props.swipeDownThreshold) {
       if (this.swipeDownOffset > this.props.swipeDownThreshold) {
         if (this.props.onSwipeDown) {
@@ -478,7 +478,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
     }
 
     if (this.props.enableCenterFocus && this.scale < 1) {
-      // 如果缩放小于1，强制重置为 1
+      // Force reset to 1 if zoom is less than 1
       this.scale = 1;
       Animated.timing(this.animatedScale, {
         toValue: this.scale,
@@ -488,7 +488,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
     }
 
     if (this.props.imageWidth * this.scale <= this.props.cropWidth) {
-      // 如果图片宽度小于盒子宽度，横向位置重置
+      // If the image width is smaller than the box width, the landscape position is reset
       this.positionX = 0;
       Animated.timing(this.animatedPositionX, {
         toValue: this.positionX,
@@ -498,7 +498,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
     }
 
     if (this.props.imageHeight * this.scale <= this.props.cropHeight) {
-      // 如果图片高度小于盒子高度，纵向位置重置
+      // If the image height is less than the box height, the portrait position is reset
       this.positionY = 0;
       Animated.timing(this.animatedPositionY, {
         toValue: this.positionY,
@@ -507,10 +507,10 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
       }).start();
     }
 
-    // 横向肯定不会超出范围，由拖拽时控制
-    // 如果图片高度大于盒子高度，纵向不能出现黑边
+    // The horizontal direction will definitely not exceed the scope, and it is controlled by dragging
+    // If the height of the image is greater than the height of the box, black borders cannot appear vertically
     if (this.props.imageHeight * this.scale > this.props.cropHeight) {
-      // 纵向能容忍的绝对值
+      // The absolute value of vertical tolerance
       const verticalMax = (this.props.imageHeight * this.scale - this.props.cropHeight) / 2 / this.scale;
       if (this.positionY < -verticalMax) {
         this.positionY = -verticalMax;
@@ -525,7 +525,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
     }
 
     if (this.props.imageWidth * this.scale > this.props.cropWidth) {
-      // 纵向能容忍的绝对值
+      // The absolute value of vertical tolerance
       const horizontalMax = (this.props.imageWidth * this.scale - this.props.cropWidth) / 2 / this.scale;
       if (this.positionX < -horizontalMax) {
         this.positionX = -horizontalMax;
@@ -539,7 +539,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
       }).start();
     }
 
-    // 拖拽正常结束后,如果没有缩放,直接回到0,0点
+    // After the normal end of dragging, if there is no zoom, go directly back to 0,0 point
     if (this.props.enableCenterFocus && this.scale === 1) {
       this.positionX = 0;
       this.positionY = 0;
@@ -555,10 +555,10 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
       }).start();
     }
 
-    // 水平溢出量置空
+    // Horizontal overflow is empty
     this.horizontalWholeOuterCounter = 0;
 
-    // swipeDown 溢出量置空
+    // swipeDown The overflow amount is empty
     this.swipeDownOffset = 0;
 
     this.imageDidMove('onPanResponderRelease');
@@ -626,7 +626,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
   }
 
   /**
-   * 图片区域视图渲染完毕
+   * The image area view is rendered
    */
   public handleLayout(event: LayoutChangeEvent): void {
     if (this.props.layoutChange) {
@@ -635,7 +635,7 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
   }
 
   /**
-   * 重置大小和位置
+   * Reset size and position
    */
   public reset(): void {
     this.scale = 1;
