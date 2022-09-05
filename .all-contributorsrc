@@ -6,6 +6,15 @@
   "commit": false,
   "contributors": [
     {
+      "login": "foush",
+      "name": "Foush",
+      "avatar_url": "https://avatars.githubusercontent.com/u/708458?v=4",
+      "profile": "https://johnfoushee.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
       "login": "kingdaro",
       "name": "Darius",
       "avatar_url": "https://avatars1.githubusercontent.com/u/19603573?v=4",
@@ -62,7 +71,7 @@
   ],
   "contributorsPerLine": 7,
   "projectName": "react-native-image-zoom",
-  "projectOwner": "ascoders",
+  "projectOwner": "onkeypress-llc",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true

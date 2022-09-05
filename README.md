@@ -1,6 +1,9 @@
 ## Show Cases
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > Zoom while sliding
@@ -62,8 +65,8 @@ export default class App extends React.Component {
 | **cropHeight(required)** | number | operating area height | 100 |
 | **imageWidth(required)** | number | picture width | 100 |
 | **imageHeight(required)** | number | picture height | 100 |
-| onClick | (eventParams: [IOnClick](https://github.com/ascoders/react-native-image-zoom/blob/master/src/image-zoom/image-zoom.type.ts))=>void | onClick | ()=>{} |
-| onDoubleClick | (eventParams: [IOnClick](https://github.com/ascoders/react-native-image-zoom/blob/master/src/image-zoom/image-zoom.type.ts))=>void | onDoubleClick | ()=>{} |
+| onClick | (eventParams: [IOnClick](https://github.com/onkeypress-llc/react-native-image-zoom/blob/master/src/image-zoom/image-zoom.type.ts))=>void | onClick | ()=>{} |
+| onDoubleClick | (eventParams: [IOnClick](https://github.com/onkeypress-llc/react-native-image-zoom/blob/master/src/image-zoom/image-zoom.type.ts))=>void | onDoubleClick | ()=>{} |
 | panToMove | boolean | allow to move picture with one finger | true |
 | pinchToZoom | boolean | allow scale with two fingers | true |
 | clickDistance | number | how many finger movement can also trigger `onClick` | 10 |
@@ -72,9 +75,9 @@ export default class App extends React.Component {
 | responderRelease | (vx: number)=>void | let go but do not cancel | ()=>{} |
 | maxOverflow | number | maximum sliding threshold | 100 |
 | longPressTime | number | long press threshold | 800 |
-| onLongPress | (eventParams: [IOnClick](https://github.com/ascoders/react-native-image-zoom/blob/master/src/image-zoom/image-zoom.type.ts))=>void | on longPress | ()=> {} |
+| onLongPress | (eventParams: [IOnClick](https://github.com/onkeypress-llc/react-native-image-zoom/blob/master/src/image-zoom/image-zoom.type.ts))=>void | on longPress | ()=> {} |
 | doubleClickInterval | number | time allocated for second click to be considered as doublClick event | 175 |
-| onMove | ( position: [IOnMove](https://github.com/ascoders/react-native-image-zoom/blob/master/src/image-zoom/image-zoom.type.ts) )=>void | reports movement position data (helpful to build overlays) | ()=> {} |
+| onMove | ( position: [IOnMove](https://github.com/onkeypress-llc/react-native-image-zoom/blob/master/src/image-zoom/image-zoom.type.ts) )=>void | reports movement position data (helpful to build overlays) | ()=> {} |
 | centerOn | { x: number, y: number, scale: number, duration: number } | if given this will cause the map to pan and zoom to the desired location | undefined |
 | enableSwipeDown | boolean | for enabling vertical movement if user doesn't want it | false |
 | enableCenterFocus | boolean | for disabling focus on image center if user doesn't want it | true |
@@ -124,17 +127,19 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://kingdaro.net"><img src="https://avatars1.githubusercontent.com/u/19603573?v=4" width="100px;" alt=""/><br /><sub><b>Darius</b></sub></a><br /><a href="https://github.com/ascoders/react-native-image-zoom/commits?author=kingdaro" title="Code">💻</a></td>
-    <td align="center"><a href="https://tpxp.ddns.net"><img src="https://avatars2.githubusercontent.com/u/7191841?v=4" width="100px;" alt=""/><br /><sub><b>Thomas P.</b></sub></a><br /><a href="https://github.com/ascoders/react-native-image-zoom/commits?author=TPXP" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/ditorojuan"><img src="https://avatars0.githubusercontent.com/u/22530892?v=4" width="100px;" alt=""/><br /><sub><b>Juan Di Toro</b></sub></a><br /><a href="https://github.com/ascoders/react-native-image-zoom/commits?author=ditorojuan" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/AlhaythamElhassan"><img src="https://avatars0.githubusercontent.com/u/20684701?v=4" width="100px;" alt=""/><br /><sub><b>Alhaytham Elhassan</b></sub></a><br /><a href="https://github.com/ascoders/react-native-image-zoom/commits?author=AlhaythamElhassan" title="Code">💻</a></td>
-    <td align="center"><a href="http://alexandrius.com"><img src="https://avatars3.githubusercontent.com/u/5978212?v=4" width="100px;" alt=""/><br /><sub><b>Alexander Pataridze</b></sub></a><br /><a href="https://github.com/ascoders/react-native-image-zoom/commits?author=alexandrius" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/pxpeterxu"><img src="https://avatars1.githubusercontent.com/u/2924388?v=4" width="100px;" alt=""/><br /><sub><b>Peter Xu</b></sub></a><br /><a href="https://github.com/ascoders/react-native-image-zoom/commits?author=pxpeterxu" title="Code">💻</a></td>
+  <td align="center"><a href="http://johnfoushee.com"><img src="https://avatars.githubusercontent.com/u/708458?v=4" width="100px;" alt=""/><br /><sub><b>Foush</b></sub></a><br /><a href="https://github.com/onkeypress-llc/react-native-image-zoom/commits?author=foush" title="Code">💻</a></td>
+    <td align="center"><a href="http://kingdaro.net"><img src="https://avatars1.githubusercontent.com/u/19603573?v=4" width="100px;" alt=""/><br /><sub><b>Darius</b></sub></a><br /><a href="https://github.com/onkeypress-llc/react-native-image-zoom/commits?author=kingdaro" title="Code">💻</a></td>
+    <td align="center"><a href="https://tpxp.ddns.net"><img src="https://avatars2.githubusercontent.com/u/7191841?v=4" width="100px;" alt=""/><br /><sub><b>Thomas P.</b></sub></a><br /><a href="https://github.com/onkeypress-llc/react-native-image-zoom/commits?author=TPXP" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ditorojuan"><img src="https://avatars0.githubusercontent.com/u/22530892?v=4" width="100px;" alt=""/><br /><sub><b>Juan Di Toro</b></sub></a><br /><a href="https://github.com/onkeypress-llc/react-native-image-zoom/commits?author=ditorojuan" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/AlhaythamElhassan"><img src="https://avatars0.githubusercontent.com/u/20684701?v=4" width="100px;" alt=""/><br /><sub><b>Alhaytham Elhassan</b></sub></a><br /><a href="https://github.com/onkeypress-llc/react-native-image-zoom/commits?author=AlhaythamElhassan" title="Code">💻</a></td>
+    <td align="center"><a href="http://alexandrius.com"><img src="https://avatars3.githubusercontent.com/u/5978212?v=4" width="100px;" alt=""/><br /><sub><b>Alexander Pataridze</b></sub></a><br /><a href="https://github.com/onkeypress-llc/react-native-image-zoom/commits?author=alexandrius" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/pxpeterxu"><img src="https://avatars1.githubusercontent.com/u/2924388?v=4" width="100px;" alt=""/><br /><sub><b>Peter Xu</b></sub></a><br /><a href="https://github.com/onkeypress-llc/react-native-image-zoom/commits?author=pxpeterxu" title="Code">💻</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
