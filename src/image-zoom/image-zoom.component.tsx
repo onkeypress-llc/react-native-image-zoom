@@ -41,10 +41,10 @@ export default class ImageViewer extends React.Component<ImageZoomProps, ImageZo
   private centerDiffY = 0;
 
   // 触发单击的 timeout
-  private singleClickTimeout: number | undefined;
+  private singleClickTimeout: NodeJS.Timeout | undefined;
 
   // 计算长按的 timeout
-  private longPressTimeout: number | undefined;
+  private longPressTimeout: NodeJS.Timeout | undefined;
 
   // 上一次点击的时间
   private lastClickTime = 0;
